@@ -65,6 +65,15 @@ export default async function(cwd: Path = Path.cwd()): Promise<VirtualEnv> {
     srcroot = lastd
   }
 
+  // Try falling back to HOME
+  if (!srcroot) {
+    try {
+      await supp(home)
+      srcroot = home
+    } catch  {
+    }
+  }
+
   if (!srcroot) throw new TeaError("not-found: dev-env", {cwd, teaDir})
 
   for (const [key, value] of Object.entries(env)) {
